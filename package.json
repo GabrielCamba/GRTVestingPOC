@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ gabrielcaba/subgraphito",
-    "create-local": "graph create --node http://localhost:8020/ gabrielcaba/subgraphito",
-    "remove-local": "graph remove --node http://localhost:8020/ gabrielcaba/subgraphito",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 gabrielcaba/subgraphito"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ gabrielcamba/subgraphito",
+    "create-local": "graph create --node http://localhost:8020/ gabrielcamba/subgraphito",
+    "remove-local": "graph remove --node http://localhost:8020/ gabrielcamba/subgraphito",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 gabrielcamba/subgraphito"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.25.0",

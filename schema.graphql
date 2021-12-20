@@ -1,6 +1,18 @@
-type ExampleEntity @entity {
+type GraphCirculatingSupply @entity {
+  "ID is set to 1"
   id: ID!
-  count: BigInt!
-  caller: Bytes! # address
-  sigHash: Bytes! # bytes4
+
+  "Graph Token supply"
+  totalSupply: BigInt!
+
+  "Graph Circulating Supply should be totalSupply minus periodsToProcessTotalAmount plus periodsProcessedTotalAmount" 
+  circulatingSupply: BigInt!
+
+  dynamicContracts: [String!]!
+
+  blockHeight: BigInt!
+
+  " outstanding + released = vested amount"
+  totalOutstandingValue: BigInt!
+  totalReleasedAmount: BigInt!
 }

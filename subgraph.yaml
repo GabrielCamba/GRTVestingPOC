@@ -1,13 +1,35 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
-  - kind: ethereum
+  - kind: ethereum/contract
+    name: GraphToken
+    network: mainnet
+    source:
+      address: '0xc944E90C64B2c07662A292be6244BDf05Cda44a7'
+      abi: GraphToken
+      startBlock: 11440000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/graphToken.ts
+      entities:
+        - GraphAccount
+        - GraphNetwork
+      abis:
+        - name: GraphToken
+          file: ./abis/GraphToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+  - kind: ethereum/contract
     name: GraphTokenLockManager
     network: mainnet
     source:
       address: "0xFCf78AC094288D7200cfdB367A8CD07108dFa128"
       abi: GraphTokenLockManager
+      startBlock: 11440000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -24,21 +46,11 @@ dataSources:
       abis:
         - name: GraphTokenLockManager
           file: ./abis/GraphTokenLockManager.json
+        - name: GraphTokenLockWallet
+          file: ./abis/GraphTokenLockWallet.json
       eventHandlers:
-        - event: FunctionCallAuth(indexed address,indexed bytes4,indexed address,string)
-          handler: handleFunctionCallAuth
-        - event: MasterCopyUpdated(indexed address)
-          handler: handleMasterCopyUpdated
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
-        - event: ProxyCreated(indexed address)
-          handler: handleProxyCreated
-        - event: TokenDestinationAllowed(indexed address,bool)
-          handler: handleTokenDestinationAllowed
         - event: TokenLockCreated(indexed address,indexed bytes32,indexed address,address,uint256,uint256,uint256,uint256,uint256,uint256,uint8)
           handler: handleTokenLockCreated
-        - event: TokensDeposited(indexed address,uint256)
-          handler: handleTokensDeposited
-        - event: TokensWithdrawn(indexed address,uint256)
-          handler: handleTokensWithdrawn
-      file: ./src/mapping.ts
+      blockHandlers:  
+        - handler: handleBlock
+      file: ./src/mappings/graphTokenLockManager.ts
