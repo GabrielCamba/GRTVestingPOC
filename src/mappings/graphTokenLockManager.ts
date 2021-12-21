@@ -33,14 +33,10 @@ export function handleBlock(block: ethereum.Block): void {
     circulatingSupply.dynamicContracts.push(GTLW2.toHexString())
   }
 
-  // if it is a new block
-  if (circulatingSupply.blockHeight < blockHeight) {
-    // sets block height and values to 0 to start calculating again
-    circulatingSupply.blockHeight = blockHeight
-    circulatingSupply.totalOutstandingValue = ZERO
-    circulatingSupply.totalReleasedAmount = ZERO
-    circulatingSupply.circulatingSupply = circulatingSupply.totalSupply
-  }
+  circulatingSupply.blockHeight = blockHeight
+  circulatingSupply.totalOutstandingValue = ZERO
+  circulatingSupply.totalReleasedAmount = ZERO
+  circulatingSupply.circulatingSupply = circulatingSupply.totalSupply
 
   let dc = circulatingSupply.dynamicContracts
 
