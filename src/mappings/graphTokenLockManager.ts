@@ -42,22 +42,29 @@ export function handleBlock(block: ethereum.Block): void {
     circulatingSupply.circulatingSupply = circulatingSupply.totalSupply
   }
 
-  let gtlwContract = GraphTokenLockWallet.bind(block.author) 
-  let outstandingAmount = gtlwContract.try_totalOutstandingAmount()
-  let releasedAmount = gtlwContract.try_releasedAmount()
+  let dc = circulatingSupply.dynamicContracts
 
-  let outstandingAmountValue = outstandingAmount.reverted ? ZERO : outstandingAmount.value
-  let releasedAmountValue = releasedAmount.reverted ? ZERO : releasedAmount.value
+  for(let i = 0; i < dc.length; i++) {
 
-  let currentOutstandingValue =  circulatingSupply.totalOutstandingValue.plus(outstandingAmountValue)
-  let currentReleasedAmount = circulatingSupply.totalReleasedAmount.plus(releasedAmountValue)
+    let current = Address.fromString(dc[i])
 
-  circulatingSupply.totalOutstandingValue = currentOutstandingValue
-  circulatingSupply.totalReleasedAmount = currentReleasedAmount
+    let gtlwContract = GraphTokenLockWallet.bind(current) 
+    let outstandingAmount = gtlwContract.try_totalOutstandingAmount()
+    let releasedAmount = gtlwContract.try_releasedAmount()
 
-  let currentCirculatingSupply = circulatingSupply.circulatingSupply.minus(circulatingSupply.totalOutstandingValue)
+    let outstandingAmountValue = outstandingAmount.reverted ? ZERO : outstandingAmount.value
+    let releasedAmountValue = releasedAmount.reverted ? ZERO : releasedAmount.value
 
-  circulatingSupply.circulatingSupply = currentCirculatingSupply
+    let currentOutstandingValue =  circulatingSupply.totalOutstandingValue.plus(outstandingAmountValue)
+    let currentReleasedAmount = circulatingSupply.totalReleasedAmount.plus(releasedAmountValue)
+
+    circulatingSupply.totalOutstandingValue = currentOutstandingValue
+    circulatingSupply.totalReleasedAmount = currentReleasedAmount
+
+    let currentCirculatingSupply = circulatingSupply.circulatingSupply.minus(circulatingSupply.totalOutstandingValue)
+
+    circulatingSupply.circulatingSupply = currentCirculatingSupply
   
+  }
   circulatingSupply.save()
 }
